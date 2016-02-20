@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from urllib2 import urlopen
 from firebase import firebase
 
-fireBase = firebase.FirebaseApplication('https://mhacks2016.firebaseio.com/', None)
+fireBase = firebase.FirebaseApplication('https://flickering-torch-8936.firebaseio.com/', None)
 
 
 def getIndustryFromScraper(company): #Get Industry
