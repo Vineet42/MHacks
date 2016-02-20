@@ -31,3 +31,4 @@ def pushDataToFirebase(collection, data):
 
 
 
+
