@@ -1,4 +1,6 @@
 import math
+import json
+from firebase import firebase
 # MUST FIRST LOAD USER DATA FROM CAPITAL ONE DEMO ACCOUNTS
 
 # A user is going to be a dictof industry: [[frequency, total amt], [freq, amt]]
@@ -9,8 +11,37 @@ import math
 # Note that the user info would be a GLOBAL CONSTANT within the analysis context
 
 # get user info from Capital One API:
-user = {"Information Technology": [[5, 100], [6, 100], [1, 200], [10, 20], [30, 600]],
-"Materials":[[6, 70], [1, 10], [1, 1], [5, 6]]}
+userJson = firebase.get("/data", None)
+sectors = ["Energy", "Materials", "Industrials", "Consumer Discretionary", "Consumer Staples",
+	"Health Care", "Financials", "Information Technology", "Telecommunication Services", "Utilities"]
+sectors2 = [["Energy0", "Energy1", "Energy2", "Energy3", "Energy4"], ["Materials0", "Materials1", "Materials2",
+    "Materials3", "Materials4"], ["Industrials0", "Industrials1", "Industrials2", "Industrials3", "Industrials4"],
+    ["Consumer Discretionary0", "Consumer Discretionary1", "Consumer Discretionary2", "Consumer Discretionary3",
+    "Consumer Discretionary4"], ["Consumer Staples0", "Consumer Staples1", "Consumer Staples2",
+    "Consumer Staples3", "Consumer Staples4"], ["Health Care0", "Health Care1", "Health Care2",
+    "Health Care3", "Health Care4"], ["Financials0", "Financials1", "Financials2", "Financials3",
+    "Financials4"], ["Information Technology0", "Information Technology1", "Information Technology2",
+    "Information Technology3", "Information Technology4"], ["Telecommunication Services0",
+    "Telecommunication Services1", "Telecommunication Services2", "Telecommunication Services3",
+    "Telecommunication Services4"], ["Utilities0", "Utilities1", "Utilities2", "Utilities3", "Utilities4"]]
+
+def getOrganizedResult(userJson):
+    count1 = 0
+    user = {}
+    while count1 < 10:
+        results = []
+        count2 = 0
+        while count2 < 5:
+            freq = len(list(filter(lambda x: x["description"] == sectors2[count1][count2], userJson)))
+            amt = sum(list(map(lambda x: x["amount"], list(filter(lambda x: x["description"] == sectors2[count1][count2], userJson)))))
+            results += [[freq, amt]]
+            count2 += 1
+        industry = sectors[count1]
+        user[industry] = results
+        count1 += 1
+    return user
+
+user = getOrganizedResult(userJson)
 
 # (listof (listof Num)) -> Num
 def avg_freq(listofnum):
