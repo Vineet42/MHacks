@@ -3,7 +3,7 @@ var app = angular.module("myApp", ["firebase"]);
 
 app.controller("MainController", function ($scope, $firebaseAuth, $firebaseArray, $firebaseObject) {
   $scope.process = function() {
-    ref.set({"go": true})
+    ref.push({"go": true})
     $scope.suggestionsText = "Based on your purchasing history, and past stock performance, we recommend the following stocks:"
     $scope.suggestions = "AAPL, TSLA, GOOG, MSFT"
   }

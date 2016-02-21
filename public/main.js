@@ -5,7 +5,7 @@ app.controller("MainController", function ($scope, $firebaseAuth, $firebaseArray
   $scope.process = function() {
   	$scope.limit = 5
 
-    ref.set({"go": true})
+    ref.push({"go": true})
     $scope.suggestionsText = "Based on your purchasing history, and past stock performance, we recommend the following stocks:"
 
     $scope.list = $firebaseArray(ref.child("recommendations"))
