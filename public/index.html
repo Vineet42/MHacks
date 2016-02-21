@@ -68,7 +68,10 @@
 
 <div class="col-md-6 mt25">
 <p style="font-style:italic">{{suggestionsText}}</p>
-<h1>{{suggestions}}</h1>
+<div ng-repeat="value in list | limitTo: limit"> 
+<h4>{{value.$value}}</h4>
+</div>
+<a ng-href="" ng-click="limit = limit + 3" ng-show="list" style="cursor: pointer">More<br />
 </div>
 
 

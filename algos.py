@@ -139,5 +139,6 @@ def getRecommendations(marketSector):
         toReturn.append(line)
     return toReturn[0:len(toReturn)-1]
 
-[sector, confidence] = overall_weight(weight_freq(all_industries(user)), weight_amt(all_industries(user)))
-print(getRecommendations(sector), confidence)
+def conductAnalysis():
+    [sector, confidence] = overall_weight(weight_freq(all_industries(user)), weight_amt(all_industries(user)))
+    return [getRecommendations(sector), confidence]

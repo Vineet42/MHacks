@@ -3,9 +3,14 @@ var app = angular.module("myApp", ["firebase"]);
 
 app.controller("MainController", function ($scope, $firebaseAuth, $firebaseArray, $firebaseObject) {
   $scope.process = function() {
+  	$scope.limit = 5
+
     ref.set({"go": true})
     $scope.suggestionsText = "Based on your purchasing history, and past stock performance, we recommend the following stocks:"
-    $scope.suggestions = "AAPL, TSLA, GOOG, MSFT"
+
+    $scope.list = $firebaseArray(ref.child("recommendations"))
+
+    // $scope.suggestions = ref.get("recommendations")
   }
 })
 

@@ -39,15 +39,11 @@ count = 0
 
 def job_function():
 	print("hello from job_function!")
-	global count
 	things = getDataFromFirebase()
-	# print(things)
 	for thing in things:
 		if(things[thing]["processed"] == False):
 			print(things[thing]["data"])
 			putDataToFirebase("users", thing, things[thing]["data"])
-	# pushDataToFirebase("users", count)
-	count += 1
 
 
 
