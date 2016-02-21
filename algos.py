@@ -8,7 +8,7 @@ import math
 
 # Note that the user info would be a GLOBAL CONSTANT within the analysis context
 
-# sample data set:
+# get user info from Capital One API:
 user = {"Information Technology": [[5, 100], [6, 100], [1, 200], [10, 20], [30, 600]],
 "Materials":[[6, 70], [1, 10], [1, 1], [5, 6]]}
 
@@ -131,3 +131,13 @@ def overall_weight(l1, l2):
         result = result + [[l1[count][0], product]]
         count += 1
     return sorted(result, key = lambda weights: weights[1])[-1]
+
+def getRecommendations(marketSector):
+    myFile = open(marketSector + "Rankings.txt", "r").read().split("\n")
+    toReturn = []
+    for line in myFile:
+        toReturn.append(line)
+    return toReturn[0:len(toReturn)-1]
+
+[sector, confidence] = overall_weight(weight_freq(all_industries(user)), weight_amt(all_industries(user)))
+print(getRecommendations(sector), confidence)
