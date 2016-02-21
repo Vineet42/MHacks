@@ -4,10 +4,11 @@ var app = angular.module("myApp", ["firebase"]);
 app.controller("MainController", function ($scope, $firebaseAuth, $firebaseArray, $firebaseObject) {
   $scope.process = function() {
   	$scope.limit = 3
+
     ref.push({"go": true})
     $scope.suggestionsText = "Based on your purchasing history, and past stock performance, we recommend the following stocks:"
     if ($firebaseArray(ref.child("recommendations"))) $scope.list = $firebaseArray(ref.child("recommendations"))
-    	   $scope.list = ['AAPL', 'GOOG', 'YHOO'];
+    	   $scope.list = ['STZ', 'DPS', 'KMB'];
 
 
 

@@ -42,16 +42,21 @@
   background-color:white;
   color: #4fc3f7;
 }
+
+.small{
+  font-size: 16px;
+}
   </style>
+
 
 
 <body ng-controller="MainController">
 
+
 <div class="col-sm-4 pt70 blue-bg" style="height:100vh">
 <div class="container wow fadeInLeft">
 <h2 style="color:white;font-size:5rem">WalletStreet</h2>
-<button class="btn btn-cool" style="width:20vw" ng-click="process()">Recommend Stocks!</button>
-
+<button class="btn btn-cool" style="width:20vw" ng-click="process()" id="FindStocks" name="{{list}}">Recommend Stocks!</button>
 </div>
 </div>
 
@@ -60,9 +65,13 @@
 <p style="text-align: center">{{suggestionsText}}</p>
 <div ng-repeat="(key,value) in list">
 <div class="col-sm-4" style="text-align: center">
-  <h1 class="{{key}}" style="font-size:60px;">{{value}}</h1>
-</div>
+  <h1 style="font-size:60px;">{{value}}</h1>
+  <div class="col-sm-12"><span id="{{value}}"></span></div>
+  <div class="col-sm-12" style="padding-bottom: 30px"><h2 id="{{value}}currPrice"></h2><span class="small" id="{{value}}change"></span></div>
+  <div class="col-sm-6"><p id="{{value}}lowPoint"></p><h4>Low</h4></div>
+    <div class="col-sm-6"><p id="{{value}}highPoint"></p><h4>High</h4></div>
 
+</div>
 
 
 </div>
