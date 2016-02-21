@@ -11,7 +11,10 @@ from firebase import firebase
 # Note that the user info would be a GLOBAL CONSTANT within the analysis context
 
 # get user info from Capital One API:
-userJson = firebase.get("/data", None)
+fireBase = firebase.FirebaseApplication('https://flickering-torch-8936.firebaseio.com/', None)
+
+
+userJson = fireBase.get("/data", None)
 sectors = ["Energy", "Materials", "Industrials", "Consumer Discretionary", "Consumer Staples",
 	"Health Care", "Financials", "Information Technology", "Telecommunication Services", "Utilities"]
 sectors2 = [["Energy0", "Energy1", "Energy2", "Energy3", "Energy4"], ["Materials0", "Materials1", "Materials2",
