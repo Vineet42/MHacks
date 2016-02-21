@@ -1,71 +1,76 @@
-# P/E ratio - (security data) resultMap / SECURITY[0] / peRatio
-# P/B ratio - (security data) resultMap / SECURITY[0] / pbRatio
-# ROA - (security data) resultMap / SECURITY[0] / returnOnAssets
-# One Year Sharpe ratio - (performance data) resultMap / RETURNS[0] / latestPerf / oneYearSharpeRatio   0.20
-import requests
-import json
+sectors = ["Energy", "Materials", "Industrials", "Consumer Discretionary", "Consumer Staples", 
+	"Health Care", "Financials", "Information Technology", "Telecommunication Services", "Utilities"]
 
-# sectors = ["Energy", "Materials", "Industrials", "Consumer Discretionary", "Consumer Staples", 
-	# "Health Care", "Financials", "Information Technology", "Telecommunication Services", "Utilities"]
-sectors = ["Telecommunications Services"]
+# sector = sectors[0]
 for sector in sectors:
-	print("PROCESSING SECTOR: " + sector)
-	myfile = open(sector + ".txt", "w+")
+	myfile = open(sector + ".txt", "r").read().split("\n")
+	myfile = myfile[0:len(myfile)-1]
 
-	portfolioAnalysisRequest = requests.get("https://test3.blackrock.com/tools/hackathon/search-securities", params= {"useCache":"true","filters":"gicsSector1:(\"" + sector + "\")","responseFields":"bloombergTicker"})
+	outfile = open(sector + "Rankings.txt", "w")
 
-	jsonData = portfolioAnalysisRequest.json()
+	nameArr = []
+	sharpeArr = []
+	peArr = []
+	pbArr = []
+	roaArr = []
 
-	companies = jsonData["resultMap"]["SEARCH_RESULTS"][0]["resultList"]
-	for company in companies:
-		ticker = company["bloombergTicker"]
-		if(ticker):
-			ticker = ticker.split(" ")[0]
+	for line in myfile:
+		data = line.split(",")
+		nameArr.append(data[0])
+		sharpeArr.append(data[1])
+		peArr.append(data[2])
+		pbArr.append(data[3])
+		roaArr.append(data[4])
 
-			print(ticker)
-			print(ticker, file = myfile)
-			performanceData = requests.get("https://test3.blackrock.com/tools/hackathon/performance", params= {'identifiers':ticker})
+	s = sharpeArr
+	argmaxes = sorted(range(len(s)), key=lambda k: s[k])
+	indexes = zip(xrange(len(s)), argmaxes)
+	sorted_indexes = sorted(indexes, key=lambda k: k[1])
+	sharpeArr = [v[0] for v in sorted_indexes]
 
-			jsonData = performanceData.json()
-			try:
-				sharpe = jsonData["resultMap"]["RETURNS"][0]["latestPerf"]["oneYearSharpeRatio"]
-			except:
-				sharpe = -1000
+	s = peArr
+	argmaxes = sorted(range(len(s)), key=lambda k: s[k])
+	indexes = zip(xrange(len(s)), argmaxes)
+	sorted_indexes = sorted(indexes, key=lambda k: k[1])
+	peArr = [v[0] for v in sorted_indexes]
 
-			# print(sharpe)
+	s = pbArr
+	argmaxes = sorted(range(len(s)), key=lambda k: s[k])
+	indexes = zip(xrange(len(s)), argmaxes)
+	sorted_indexes = sorted(indexes, key=lambda k: k[1])
+	pbArr = [v[0] for v in sorted_indexes]
 
+	s = roaArr
+	argmaxes = sorted(range(len(s)), key=lambda k: s[k])
+	indexes = zip(xrange(len(s)), argmaxes)
+	sorted_indexes = sorted(indexes, key=lambda k: k[1])
+	roaArr = [v[0] for v in sorted_indexes]
 
-
-			securityData = requests.get("https://test3.blackrock.com/tools/hackathon/security-data", params= {'identifiers':ticker})
-
-			jsonData = securityData.json()
-
-
-			try:
-				peRatio = jsonData["resultMap"]["SECURITY"][0]["peRatio"]
-			except:
-				peRatio = -1000
-
-			try:
-				pbRatio = jsonData["resultMap"]["SECURITY"][0]["pbRatio"]
-			except:
-				pbRatio = -1000
-
-			try:
-				roa = jsonData["resultMap"]["SECURITY"][0]["returnOnAssets"]
-			except:
-				roa = -1000
+	totArr = [sum(x) for x in zip(sharpeArr, peArr, pbArr, roaArr)]
 
 
-			# print(ticker)
-			print(sharpe)
-			print(peRatio)
-			print(pbRatio)
-			print(roa)
-			print()
 
-			print(sharpe, file = myfile)
-			print(peRatio, file = myfile)
-			print(pbRatio, file = myfile)
-			print(roa, file = myfile)
-			print("", file = myfile)
+	print(nameArr)
+	print
+	print(totArr)
+
+	s = totArr
+	argmaxes = sorted(range(len(s)), key=lambda k: s[k])
+	indexes = zip(xrange(len(s)), argmaxes)
+	sorted_indexes = sorted(indexes, key=lambda k: k[1])
+	totArr = [v[0] for v in sorted_indexes]
+
+	print(totArr)
+
+	finalArr = [""] * len(totArr)
+
+	for i in range(len(totArr)):
+		finalArr[totArr[i]] = nameArr[i]
+
+	finalArr.reverse()
+
+	for company in finalArr:
+		print company
+		outfile.write(company + "\n")
+
+	outfile.close()
