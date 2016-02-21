@@ -9,8 +9,12 @@ app.controller("MainController", function ($scope, $firebaseAuth, $firebaseArray
     $scope.suggestionsText = "Based on your purchasing history, and past stock performance, we recommend the following stocks:"
 
     $scope.list = $firebaseArray(ref.child("recommendations"))
-
     // $scope.suggestions = ref.get("recommendations")
+  }
+
+
+  $scope.showGraph = function(data) {
+  	var obj = new Markit.InteractiveChartApi(data, 365);
   }
 })
 
