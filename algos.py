@@ -1,15 +1,16 @@
 import math
 # MUST FIRST LOAD USER DATA FROM CAPITAL ONE DEMO ACCOUNTS
 
-# a user is going to be a dictof industry: [[frequency, total amt], [freq, amt]]
-# this is a sample code to demo the math formulae and I/O format & file types
+# A user is going to be a dictof industry: [[frequency, total amt], [freq, amt]]
+
+# This is a sample code to demo the math formulae and I/O format & file types
 #    replace all strings and numbers with queried results & firebase data
 
-# sample training data set:
+# Note that the user info would be a GLOBAL CONSTANT within the analysis context
+
+# sample data set:
 user = {"Information Technology": [[5, 100], [6, 100], [1, 200], [10, 20], [30, 600]],
 "Materials":[[6, 70], [1, 10], [1, 1], [5, 6]]}
-
-# ---------------- For the training data set --------------------------------#
 
 # (listof (listof Num)) -> Num
 def avg_freq(listofnum):
@@ -55,6 +56,7 @@ def erfcc(x):
 
 def ncdf(x):
     return 1 - 0.5*erfcc(x/(2**0.5))
+
 def normcdf(x, mu, sigma):
     t = x-mu;
     y = 0.5*erfcc(-t/(sigma*math.sqrt(2.0)));
@@ -74,16 +76,58 @@ def normdist(x, mu, sigma, f):
         y = normpdf(x,mu,sigma)
     return y
 
-# ------------------------For the actual customer data----------------------#
-
 # (dictof industry: vals) -> (listof industry)
 def all_industries(auser):
-    return list(user.keys())
+    return list(auser.keys())
+# eg. of return result: ["Information Technology", "Materials", "Financials"]
 
 #(listof Str) -> (listof (listof Str Num))
 def weight_freq(listofindustry):
     count = 0
     n = len(listofindustry)
+    freq_result = []
+    # for each industry
     while count < n:
         lolonum = user[listofindustry[count]]
-        mu =
+        mu = avg_freq(lolonum)
+        sigma = sigmamle_freq(lolonum)
+        listofnorm = []
+        count2 = 0
+        m = len(lolonum)
+        while count2 < m:
+            listofnorm = listofnorm + [normcdf(lolonum[count2][0], mu, sigma)]
+            count2 += 1
+        freq_result = freq_result + [[listofindustry[count], sum(listofnorm)/len(listofnorm)]]
+        count += 1
+    return freq_result
+
+#(listof Str) -> (listof (listof Str Num))
+def weight_amt(listofindustry):
+    count = 0
+    n = len(listofindustry)
+    amt_result = []
+    # for each industry
+    while count < n:
+        lolonum = user[listofindustry[count]]
+        mu = avg_amt(lolonum)
+        sigma = sigmamle_amt(lolonum)
+        listofnorm = []
+        count2 = 0
+        m = len(lolonum)
+        while count2 < m:
+            listofnorm = listofnorm + [normcdf(lolonum[count2][0], mu, sigma)]
+            count2 += 1
+        amt_result = amt_result + [[listofindustry[count], sum(listofnorm)/len(listofnorm)]]
+        count += 1
+    return amt_result
+
+#(listof (listof Str Num)) (listof (listof Str Num)) -> (listof (listof Str Num))
+def overall_weight(l1, l2):
+    n = len(l1)
+    count = 0
+    result = []
+    while count < n:
+        product = l1[count][1] * l2[count][1]
+        result = result + [[l1[count][0], product]]
+        count += 1
+    return sorted(result, key = lambda weights: weights[1])[-1]
