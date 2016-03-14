@@ -1,0 +1,57 @@
+
+<html>
+	<head>
+		
+		<!-- Required File -->
+		<script data-main="capital_one" src="require-jquery.js"></script>
+
+		<script>
+			$(function(){
+
+				require(['purchase'], function (purchase) {
+
+					var apikey = '423f672665a7b96dae62fe971322ebde';
+					
+					purchaseDemo(apikey, purchase); // No Purchases for existing accounts
+				});
+			});
+            
+		function purchaseDemo (apikey, purchase) {
+			var purchaseAccount = purchase.initWithKey(apikey);
+			var accID = '56c978077742719f0e4dd5ce';
+			categoriesList = ["Information Technology", "Industrials", "Telecommunication Services", "Utilities", "Energy", "Materials", "Consumer Discretionary", "Consumer staples", "Health Care", "Financials", ]
+			for (i=0; i<1000;i++){
+				var random = (Math.floor(Math.random()*9)+1);
+				for(j=0; j<random;j++){
+			var amt = (Math.floor(Math.random()*9000) + 1000);
+			var rand2 = (Math.floor(Math.random()*5)+1);
+			var superRand = ((((j%2)+1)*rand2)/2);
+			var strr = categoriesList[j] + Math.floor(superRand) ;
+			console.log(amt);
+            var samplePurchase = { "merchant_id": "56c66be6a73e492741507624", "medium": "balance", "purchase_date": "10-12-2016", "amount": amt, "status": "pending", "description": strr };
+           var result = JSON.stringify(samplePurchase);
+           console.log(result);
+
+
+			
+			console.log("[purchase - create purchase] Response: " + purchaseAccount.createPurchase(accID, result));
+			//fetch('http://api.reimaginebanking.com/accounts/56c66be6a73e492741507b5e/purchases?key=423f672665a7b96dae62fe971322ebde', {
+			//	method: "POST"
+			//}).then(function(response) {
+				//console.log(response);
+			//})
+			//var lastPurchase = purchaseAccount.getAll(accID).pop();
+			
+		}
+		}
+		} 
+
+		
+
+		
+		</script>
+	</head>
+	<body>
+		<p>pls work</p>
+	</body>
+</html>
