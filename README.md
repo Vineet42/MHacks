@@ -1,6 +1,6 @@
 WalletStreet - WINNER Best Use of Capital One API
 
-This project was created for MHacks: Refactor Feb 2016 by 
+This project was created for MHacks: Refactor Feb 2016 by    
 Shanthanu Gore - Worked on integration with the BlackRock API ;   
 Vineet Pande - Worked on the Capital One API ;    
 Paul Xu - Worked on front end ;    
